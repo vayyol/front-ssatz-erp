@@ -1,0 +1,83 @@
+<div className="grid grid-cols-4 gap-4 mb-6">
+
+                    {/* Total de Custos */}
+                    <div
+                        className="rounded-xl shadow p-5 text-white"
+                        style={{
+                            background: "#6b1f2b",
+                        }}
+                    >
+                        <h3 className="text-sm opacity-80">
+                            Custos
+                        </h3>
+
+                        <p className="text-3xl font-bold mt-2">
+                            R$ {cards.totalCustos.toFixed(2)}
+                        </p>
+
+                        <span className="text-sm opacity-80">
+                            {cards.quantidade} registros
+                        </span>
+                    </div>
+
+                    {/* Pagamentos */}
+                    <div
+                        className="rounded-xl shadow p-5"
+                        style={{
+                            background: "#f0fdf4",
+                        }}
+                    >
+                        <h3 className="text-gray-600 text-sm">
+                            Pagamentos
+                        </h3>
+
+                        <p className="text-green-700 font-semibold mt-2">
+                            Pago: R$ {cards.totalPago.toFixed(2)}
+                        </p>
+
+                        <p className="text-red-700">
+                            Pendente: R$ {cards.totalPendente.toFixed(2)}
+                        </p>
+                    </div>
+
+                    {/* Vencimentos */}
+                    <div
+                        className="rounded-xl shadow p-5"
+                        style={{
+                            background: "#fff7ed",
+                        }}
+                    >
+                        <h3 className="text-gray-600 text-sm">
+                            Vencimentos
+                        </h3>
+
+                        <p className="text-red-700 font-semibold mt-2">
+                            {cards.vencidos} vencidos
+                        </p>
+
+                        <p className="text-orange-600">
+                            {cards.proximos} próximos
+                        </p>
+                    </div>
+
+                    {/* Resumo */}
+                    <div
+                        className="rounded-xl shadow p-5"
+                        style={{
+                            background: "#eef2ff",
+                        }}
+                    >
+                        <h3 className="text-gray-600 text-sm">
+                            Resumo
+                        </h3>
+
+                        <p className="font-semibold mt-2 text-gray-700">
+                            Total de registros
+                        </p>
+
+                        <p className="text-3xl font-bold text-indigo-700">
+                            {cards.quantidade}
+                        </p>
+                    </div>
+
+                </div>
