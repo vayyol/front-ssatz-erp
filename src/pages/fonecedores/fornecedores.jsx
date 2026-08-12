@@ -192,6 +192,7 @@ function estoque() {
                 }
             )
             const fornecedores = resposta.data
+            console.log(fornecedores)
             setFornecedorA(fornecedores)
         } catch (err) {
             alert(err)
