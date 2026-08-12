@@ -323,8 +323,7 @@ function estoque() {
     //         data: "18/06/2026",
     //     },
     // ];
-    console.log("fornecedorA:", fornecedorA);
-    console.log("É array?", Array.isArray(fornecedorA));
+    
 
     const produtorios = products.map((mov) => ({
         ...mov,
