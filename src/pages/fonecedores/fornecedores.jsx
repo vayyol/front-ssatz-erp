@@ -61,6 +61,8 @@ function estoque() {
     const [filtroEmail, setFiltroEmail] = useState("");
     const [filtroTelefone, setFiltroTelefone] = useState("");
 
+    const [fornecedores, setFornecedores] = useState([]);
+
     const [dataInicial, setDataInicial] = useState("");
     const [dataFinal, setDataFinal] = useState("");
 
@@ -727,7 +729,7 @@ function estoque() {
 
                     </div>
                 );
-                
+
 
 
             case "new":
