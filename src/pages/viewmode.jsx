@@ -16,6 +16,7 @@ import EntradaSaida from "./entrada-saida/entrada-saida"
 // import Draw from "./draw"
 import RegistrosEstoque from "./movimentacoes/movimentacoes";
 import FluxoCaixa from "./fluxo-caixa/fluxo-caixa"
+import FornecedoresPage from "./fonecedores/fornecedores"
 
 import {
     LayoutDashboard,
@@ -48,6 +49,7 @@ const menuItems = [
     { icon: Building2, label: "Entrada e Saida" },
     { icon: Building2, label: "Fluxo de Caixa" },
     { icon: ShoppingCart, label: "Vendas" },
+    { icon: Boxes, label: "Fornecedores" },
     { icon: Building2, label: "Registros do Estoque" },
     // { icon: Calendar, label: "Agenda" },
     // { icon: Users, label: "Pessoas" },
@@ -87,8 +89,11 @@ function App() {
             case "Vendas":
                 return <VendasPage />
 
-              case "Fluxo de Caixa":
+            case "Fluxo de Caixa":
                 return <FluxoCaixa />
+
+            case "Fornecedore":
+                return<FornecedoresPage />
 
             // case "Registro de Custos":
             //     return <RegistroCusto />;
