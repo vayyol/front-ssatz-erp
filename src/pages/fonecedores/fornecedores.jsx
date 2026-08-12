@@ -56,10 +56,18 @@ function estoque() {
     const [precoMin, setPrecoMin] = useState("");
     const [precoMax, setPrecoMax] = useState("");
 
+    const [filtroNome, setFiltroNome] = useState("");
+    const [filtroCnpj, setFiltroCnpj] = useState("");
+    const [filtroEmail, setFiltroEmail] = useState("");
+    const [filtroTelefone, setFiltroTelefone] = useState("");
+
+    const [dataInicial, setDataInicial] = useState("");
+    const [dataFinal, setDataFinal] = useState("");
+
     //modal de confirmação
     const [showConfirm, setshowConfirm] = useState(false)
     const [loadingConfirm, setLoadingConfirm] = useState(false);
-    
+
 
     // Puxa uma lista dos produtos e garda niam lista
     async function LoadProdutos() {
@@ -323,7 +331,7 @@ function estoque() {
     //         data: "18/06/2026",
     //     },
     // ];
-    
+
 
     const produtorios = products.map((mov) => ({
         ...mov,
@@ -334,6 +342,101 @@ function estoque() {
     }));
 
     //ABAIXO SÃO OS FILTROS DE BUSCA DA BARRA DE PESQUISA E DO MODAL
+    const fornecedoresFiltrados = fornecedores.filter((fornecedor) => {
+
+        // ======================
+        // PESQUISA
+        // ======================
+
+        const texto = pesquisa.toLowerCase();
+
+        const passouPesquisa =
+            String(fornecedor.id).includes(texto) ||
+            fornecedor.nome?.toLowerCase().includes(texto) ||
+            fornecedor.telefone?.toLowerCase().includes(texto) ||
+            fornecedor.endereco?.toLowerCase().includes(texto) ||
+            fornecedor.cnpj?.toLowerCase().includes(texto) ||
+            fornecedor.email?.toLowerCase().includes(texto);
+
+        if (!passouPesquisa) {
+            return false;
+        }
+
+        // ======================
+        // NOME
+        // ======================
+
+        if (
+            filtroNome !== "" &&
+            !fornecedor.nome
+                ?.toLowerCase()
+                .includes(filtroNome.toLowerCase())
+        ) {
+            return false;
+        }
+
+        // ======================
+        // CNPJ
+        // ======================
+
+        if (
+            filtroCnpj !== "" &&
+            !fornecedor.cnpj
+                ?.toLowerCase()
+                .includes(filtroCnpj.toLowerCase())
+        ) {
+            return false;
+        }
+
+        // ======================
+        // EMAIL
+        // ======================
+
+        if (
+            filtroEmail !== "" &&
+            !fornecedor.email
+                ?.toLowerCase()
+                .includes(filtroEmail.toLowerCase())
+        ) {
+            return false;
+        }
+
+        // ======================
+        // TELEFONE
+        // ======================
+
+        if (
+            filtroTelefone !== "" &&
+            !fornecedor.telefone
+                ?.toLowerCase()
+                .includes(filtroTelefone.toLowerCase())
+        ) {
+            return false;
+        }
+
+        // ======================
+        // PERÍODO
+        // ======================
+
+        if (
+            dataInicial &&
+            fornecedor.created_at.slice(0, 10) < dataInicial
+        ) {
+            return false;
+        }
+
+        if (
+            dataFinal &&
+            fornecedor.created_at.slice(0, 10) > dataFinal
+        ) {
+            return false;
+        }
+
+        return true;
+    });
+
+
+
     const produtosFiltrados = produtorios
         .filter((produto) => {
 
@@ -402,11 +505,11 @@ function estoque() {
                         <div className="mb-6">
 
                             <h1 className="text-2xl font-bold text-gray-800">
-                                Produtos
+                                Fornecedores
                             </h1>
 
                             <p className="text-gray-500 mt-1">
-                                Gerencie todas as peças cadastradas no sistema.
+                                Gerencie todos os fornecedores cadastrados no sistema.
                             </p>
 
                         </div>
@@ -446,59 +549,23 @@ function estoque() {
                                             </th>
 
                                             <th className="px-4 py-3 text-left text-gray-700 font-semibold">
-                                                Nome da Peça
+                                                Nome
                                             </th>
 
                                             <th className="px-4 py-3 text-left text-gray-700 font-semibold">
-                                                SKU
+                                                Telefone
                                             </th>
 
                                             <th className="px-4 py-3 text-left text-gray-700 font-semibold">
-                                                Tamanho
+                                                CNPJ
                                             </th>
 
                                             <th className="px-4 py-3 text-left text-gray-700 font-semibold">
-                                                Cor
+                                                E-mail
                                             </th>
 
                                             <th className="px-4 py-3 text-left text-gray-700 font-semibold">
-                                                Modelagem
-                                            </th>
-
-                                            <th className="px-4 py-3 text-left text-gray-700 font-semibold">
-                                                Custo
-                                            </th>
-
-                                            <th className="px-4 py-3 text-left text-gray-700 font-semibold">
-                                                Venda
-                                            </th>
-
-                                            <th className="px-4 py-3 text-left text-gray-700 font-semibold">
-                                                Estoque Inicial
-                                            </th>
-
-                                            <th className="px-4 py-3 text-left text-gray-700 font-semibold">
-                                                Reestoque
-                                            </th>
-
-                                            <th className="px-4 py-3 text-left text-gray-700 font-semibold">
-                                                Vendas
-                                            </th>
-
-                                            <th className="px-4 py-3 text-left text-gray-700 font-semibold">
-                                                Estoque Atual
-                                            </th>
-
-                                            <th className="px-4 py-3 text-left text-gray-700 font-semibold">
-                                                Fornecedor
-                                            </th>
-
-                                            <th className="px-4 py-3 text-left text-gray-700 font-semibold">
-                                                Situação
-                                            </th>
-
-                                            <th className="px-4 py-3 text-left text-gray-700 font-semibold">
-                                                Status
+                                                Endereço
                                             </th>
 
                                             <th className="px-4 py-3 text-left text-gray-700 font-semibold">
@@ -516,78 +583,19 @@ function estoque() {
 
                                     <tbody>
 
-                                        {produtosFiltrados.length > 0 ? (
+                                        {fornecedoresFiltrados.length > 0 ? (
 
-                                            produtosFiltrados.map((produto, index) => {
-
-                                                // =====================================
-                                                // ESTOQUE ATUAL
-                                                // =====================================
-
-                                                const estoque =
-                                                    Number(produto.estoque ?? 0);
-
-
-                                                // =====================================
-                                                // SITUAÇÃO
-                                                // =====================================
-
-                                                let situacao;
-
-                                                if (estoque === 0) {
-
-                                                    situacao = {
-                                                        texto: "Repor",
-                                                        background: "rgba(239,68,68,.12)",
-                                                        color: "#dc2626",
-                                                        border: "1px solid rgba(239,68,68,.35)",
-                                                    };
-
-                                                } else if (estoque <= 10) {
-
-                                                    situacao = {
-                                                        texto: "Alerta",
-                                                        background: "rgba(234,179,8,.12)",
-                                                        color: "#ca8a04",
-                                                        border: "1px solid rgba(234,179,8,.35)",
-                                                    };
-
-                                                } else {
-
-                                                    situacao = {
-                                                        texto: "Normal",
-                                                        background: "rgba(34,197,94,.12)",
-                                                        color: "#16a34a",
-                                                        border: "1px solid rgba(34,197,94,.35)",
-                                                    };
-
-                                                }
-
+                                            fornecedoresFiltrados.map((fornecedor, index) => {
 
                                                 return (
 
                                                     <tr
-                                                        key={produto.id}
+                                                        key={fornecedor.id}
 
                                                         onClick={() => {
 
-                                                            setAbrirProd(produto);
-
-                                                            setNomeProduto(
-                                                                produto.nome
-                                                            );
-
-                                                            setCusto(
-                                                                produto.precoCusto
-                                                            );
-
-                                                            setVenda(
-                                                                produto.preco
-                                                            );
-
-                                                            setActiveProdutos(
-                                                                "ajustar"
-                                                            );
+                                                            // Se quiser abrir o fornecedor:
+                                                            setAbrirFornecedor(fornecedor);
 
                                                         }}
 
@@ -611,185 +619,58 @@ function estoque() {
                                                         {/* ID */}
 
                                                         <td className="px-4 py-3 font-medium text-gray-700">
-                                                            #{produto.id}
+                                                            #{fornecedor.id}
                                                         </td>
 
 
                                                         {/* NOME */}
 
                                                         <td className="px-4 py-3 text-gray-800 font-medium">
-                                                            {produto.nome}
+                                                            {fornecedor.nome}
                                                         </td>
 
 
-                                                        {/* SKU */}
+                                                        {/* TELEFONE */}
 
                                                         <td className="px-4 py-3 text-gray-600">
-                                                            {produto.sku}
+                                                            {fornecedor.telefone}
                                                         </td>
 
 
-                                                        {/* TAMANHO */}
+                                                        {/* CNPJ */}
 
                                                         <td className="px-4 py-3 text-gray-600">
-                                                            {produto.tamanho}
+                                                            {fornecedor.cnpj}
                                                         </td>
 
 
-                                                        {/* COR */}
+                                                        {/* EMAIL */}
 
                                                         <td className="px-4 py-3 text-gray-600">
-                                                            {produto.cor}
+                                                            {fornecedor.email}
                                                         </td>
 
 
-                                                        {/* MODELAGEM */}
+                                                        {/* ENDEREÇO */}
 
                                                         <td className="px-4 py-3 text-gray-600">
-                                                            {produto.modelagem}
-                                                        </td>
-
-
-                                                        {/* CUSTO */}
-
-                                                        <td className="px-4 py-3 text-gray-700">
-
-                                                            {Number(
-                                                                produto.precoCusto ?? 0
-                                                            ).toLocaleString(
-                                                                "pt-BR",
-                                                                {
-                                                                    style: "currency",
-                                                                    currency: "BRL",
-                                                                }
-                                                            )}
-
-                                                        </td>
-
-
-                                                        {/* VENDA */}
-
-                                                        <td className="px-4 py-3 font-semibold text-[#7a2430]">
-
-                                                            {Number(
-                                                                produto.preco ?? 0
-                                                            ).toLocaleString(
-                                                                "pt-BR",
-                                                                {
-                                                                    style: "currency",
-                                                                    currency: "BRL",
-                                                                }
-                                                            )}
-
-                                                        </td>
-
-
-                                                        {/* ESTOQUE INICIAL */}
-
-                                                        <td className="px-4 py-3 text-gray-700">
-                                                            {produto.estoqueInicial ?? 0}
-                                                        </td>
-
-
-                                                        {/* REESTOQUE */}
-
-                                                        <td className="px-4 py-3 text-gray-700">
-                                                            {produto.reestoque ?? 0}
-                                                        </td>
-
-
-                                                        {/* VENDAS */}
-
-                                                        <td className="px-4 py-3 text-gray-700">
-                                                            {produto.vendas ?? 0}
-                                                        </td>
-
-
-                                                        {/* ESTOQUE ATUAL */}
-
-                                                        <td className="px-4 py-3">
-
-                                                            <span
-                                                                className={`
-                                                        font-bold
-                                                        ${estoque === 0
-                                                                        ? "text-red-600"
-                                                                        : estoque <= 10
-                                                                            ? "text-yellow-600"
-                                                                            : "text-green-600"
-                                                                    }
-                                                    `}
-                                                            >
-                                                                {estoque}
-                                                            </span>
-
-                                                        </td>
-
-
-                                                        {/* FORNECEDOR */}
-
-                                                        <td className="px-4 py-3 text-gray-600">
-                                                            {produto.nome_fornecedor}
-                                                        </td>
-
-
-                                                        {/* SITUAÇÃO */}
-
-                                                        <td className="px-4 py-3">
-
-                                                            <span
-                                                                className="px-3 py-1 rounded-full text-xs font-semibold"
-                                                                style={{
-                                                                    background:
-                                                                        situacao.background,
-
-                                                                    color:
-                                                                        situacao.color,
-
-                                                                    border:
-                                                                        situacao.border,
-                                                                }}
-                                                            >
-                                                                {situacao.texto}
-                                                            </span>
-
-                                                        </td>
-
-
-                                                        {/* STATUS */}
-
-                                                        <td className="px-4 py-3">
-
-                                                            <span
-                                                                className="px-3 py-1 rounded-full text-xs font-semibold"
-                                                                style={{
-
-                                                                    background:
-                                                                        produto.status === "Ativo"
-                                                                            ? "rgba(34,197,94,.12)"
-                                                                            : "rgba(122,36,48,.12)",
-
-                                                                    color:
-                                                                        produto.status === "Ativo"
-                                                                            ? "#16a34a"
-                                                                            : "#7a2430",
-
-                                                                    border:
-                                                                        produto.status === "Ativo"
-                                                                            ? "1px solid rgba(34,197,94,.35)"
-                                                                            : "1px solid rgba(122,36,48,.35)",
-                                                                }}
-                                                            >
-                                                                {produto.status}
-                                                            </span>
-
+                                                            {fornecedor.endereco || "—"}
                                                         </td>
 
 
                                                         {/* DATA */}
 
                                                         <td className="px-4 py-3 text-gray-500 whitespace-nowrap">
-                                                            {produto.data}
+
+                                                            {fornecedor.created_at
+                                                                ? new Date(
+                                                                    fornecedor.created_at
+                                                                ).toLocaleDateString(
+                                                                    "pt-BR"
+                                                                )
+                                                                : "—"
+                                                            }
+
                                                         </td>
 
                                                     </tr>
@@ -803,10 +684,10 @@ function estoque() {
                                             <tr>
 
                                                 <td
-                                                    colSpan="16"
+                                                    colSpan="7"
                                                     className="px-4 py-10 text-center text-gray-500"
                                                 >
-                                                    Nenhum produto encontrado.
+                                                    Nenhum fornecedor encontrado.
                                                 </td>
 
                                             </tr>
@@ -830,13 +711,13 @@ function estoque() {
 
                             <span className="text-sm text-gray-500">
 
-                                {produtosFiltrados.length} produto
-                                {produtosFiltrados.length !== 1
-                                    ? "s"
+                                {fornecedoresFiltrados.length} fornecedor
+                                {fornecedoresFiltrados.length !== 1
+                                    ? "es"
                                     : ""}
 
                                 {" "}encontrado
-                                {produtosFiltrados.length !== 1
+                                {fornecedoresFiltrados.length !== 1
                                     ? "s"
                                     : ""}
 
@@ -846,6 +727,8 @@ function estoque() {
 
                     </div>
                 );
+                
+
 
             case "new":
                 return (
@@ -869,14 +752,14 @@ function estoque() {
                                         className="text-3xl font-bold"
                                         style={{ color: "#202020" }}
                                     >
-                                        Cadastro de Produtos
+                                        Cadastro de Fornecedores
                                     </h1>
 
                                     <p
                                         className="mt-1"
                                         style={{ color: "#6b7280" }}
                                     >
-                                        Preencha as informações para cadastrar um novo produto.
+                                        Preencha as informações para cadastrar um novo fornecedor.
                                     </p>
                                 </div>
 
@@ -901,7 +784,7 @@ function estoque() {
 
                                 <div>
                                     <label className="block mb-2 font-medium text-gray-700">
-                                        Nome da Peça
+                                        Nome do fornecedor
                                     </label>
 
                                     <input
@@ -918,7 +801,7 @@ function estoque() {
 
                                 <div>
                                     <label className="block mb-2 font-medium text-gray-700">
-                                        SKU
+                                        CNPJ
                                     </label>
 
                                     <input
@@ -935,7 +818,7 @@ function estoque() {
 
                                 <div>
                                     <label className="block mb-2 font-medium text-gray-700">
-                                        Tamanho
+                                        E-mail
                                     </label>
 
                                     <input
@@ -950,47 +833,15 @@ function estoque() {
                                     />
                                 </div>
 
+
+
                                 <div>
                                     <label className="block mb-2 font-medium text-gray-700">
-                                        Modelagem
+                                        Telefone para Contato
                                     </label>
 
                                     <input
                                         type="text"
-                                        value={modelagem}
-                                        onChange={(e) => setModelagem(e.target.value)}
-                                        className="w-full rounded-xl border px-4 py-3 outline-none"
-                                        style={{
-                                            borderColor: "#d1d5db",
-                                            background: "#fafafa",
-                                        }}
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block mb-2 font-medium text-gray-700">
-                                        Cor
-                                    </label>
-
-                                    <input
-                                        type="text"
-                                        value={cor}
-                                        onChange={(e) => setCor(e.target.value)}
-                                        className="w-full rounded-xl border px-4 py-3 outline-none"
-                                        style={{
-                                            borderColor: "#d1d5db",
-                                            background: "#fafafa",
-                                        }}
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block mb-2 font-medium text-gray-700">
-                                        Estoque
-                                    </label>
-
-                                    <input
-                                        type="number"
                                         value={telefone}
                                         onChange={(e) => setTelefone(e.target.value)}
                                         className="w-full rounded-xl border px-4 py-3 outline-none"
@@ -1001,56 +852,7 @@ function estoque() {
                                     />
                                 </div>
 
-                                <div>
-                                    <label className="block mb-2 font-medium text-gray-700">
-                                        Fornecedor
-                                    </label>
 
-                                    <input
-                                        type="number"
-                                        value={fornecedor}
-                                        onChange={(e) => setFornecedor(e.target.value)}
-                                        className="w-full rounded-xl border px-4 py-3 outline-none"
-                                        style={{
-                                            borderColor: "#d1d5db",
-                                            background: "#fafafa",
-                                        }}
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block mb-2 font-medium text-gray-700">
-                                        Preço de Custo
-                                    </label>
-
-                                    <input
-                                        type="number"
-                                        value={precoCusto}
-                                        onChange={(e) => setPrecoCusto(e.target.value)}
-                                        className="w-full rounded-xl border px-4 py-3 outline-none"
-                                        style={{
-                                            borderColor: "#d1d5db",
-                                            background: "#fafafa",
-                                        }}
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block mb-2 font-medium text-gray-700">
-                                        Preço de Venda
-                                    </label>
-
-                                    <input
-                                        type="number"
-                                        value={precoVenda}
-                                        onChange={(e) => setPrecoVenda(e.target.value)}
-                                        className="w-full rounded-xl border px-4 py-3 outline-none"
-                                        style={{
-                                            borderColor: "#d1d5db",
-                                            background: "#fafafa",
-                                        }}
-                                    />
-                                </div>
 
                             </div>
 
@@ -1081,7 +883,7 @@ function estoque() {
                                         color: "white",
                                     }}
                                 >
-                                    Cadastrar Produto
+                                    Cadastrar Fornecedor
                                 </button>
 
                             </div>
@@ -1128,7 +930,7 @@ function estoque() {
                                                         color: "#4b5563",
                                                     }}
                                                 >
-                                                    Cadastrando produto...
+                                                    Cadastrando fornecedor...
                                                 </p>
 
                                             </div>
@@ -1152,7 +954,7 @@ function estoque() {
                                                         color: "#6b7280",
                                                     }}
                                                 >
-                                                    Deseja realmente cadastrar este produto?
+                                                    Deseja realmente cadastrar este fornecedor?
                                                 </p>
 
                                                 <div className="flex justify-end gap-4">
@@ -1485,61 +1287,87 @@ function estoque() {
 
                                 <hr />
 
-                                <label>
-                                    <input
-                                        type="checkbox"
-                                        checked={filtroAtivo}
-                                        onChange={(e) => setFiltroAtivo(e.target.checked)}
-                                    />
-                                    Ativo
-                                </label>
+                                {/* ====================== */}
+                                {/* NOME */}
+                                {/* ====================== */}
 
-                                <br />
-
-                                <label>
-                                    <input
-                                        type="checkbox"
-                                        checked={filtroNaoAtivo}
-                                        onChange={(e) => setFiltroNaoAtivo(e.target.checked)}
-                                    />
-                                    Não Ativo
-                                </label>
-
-                                <p>Estoque mínimo</p>
+                                <p>Nome</p>
 
                                 <input
-                                    type="number"
-                                    value={estoqueMin}
-                                    onChange={(e) => setEstoqueMin(e.target.value)}
+                                    type="text"
+                                    value={filtroNome}
+                                    onChange={(e) => setFiltroNome(e.target.value)}
+                                    placeholder="Nome do fornecedor"
                                     style={{ width: "100%" }}
                                 />
 
-                                <p>Estoque máximo</p>
+                                {/* ====================== */}
+                                {/* CNPJ */}
+                                {/* ====================== */}
+
+                                <p>CNPJ</p>
 
                                 <input
-                                    type="number"
-                                    value={estoqueMax}
-                                    onChange={(e) => setEstoqueMax(e.target.value)}
+                                    type="text"
+                                    value={filtroCnpj}
+                                    onChange={(e) => setFiltroCnpj(e.target.value)}
+                                    placeholder="CNPJ"
                                     style={{ width: "100%" }}
                                 />
 
-                                <p>Preço mínimo</p>
+                                {/* ====================== */}
+                                {/* EMAIL */}
+                                {/* ====================== */}
+
+                                <p>Email</p>
 
                                 <input
-                                    type="number"
-                                    value={precoMin}
-                                    onChange={(e) => setPrecoMin(e.target.value)}
+                                    type="text"
+                                    value={filtroEmail}
+                                    onChange={(e) => setFiltroEmail(e.target.value)}
+                                    placeholder="Email"
                                     style={{ width: "100%" }}
                                 />
 
-                                <p>Preço máximo</p>
+                                {/* ====================== */}
+                                {/* TELEFONE */}
+                                {/* ====================== */}
+
+                                <p>Telefone</p>
 
                                 <input
-                                    type="number"
-                                    value={precoMax}
-                                    onChange={(e) => setPrecoMax(e.target.value)}
+                                    type="text"
+                                    value={filtroTelefone}
+                                    onChange={(e) => setFiltroTelefone(e.target.value)}
+                                    placeholder="Telefone"
                                     style={{ width: "100%" }}
                                 />
+
+                                {/* ====================== */}
+                                {/* PERÍODO */}
+                                {/* ====================== */}
+
+                                <p>Data inicial</p>
+
+                                <input
+                                    type="date"
+                                    value={dataInicial}
+                                    onChange={(e) => setDataInicial(e.target.value)}
+                                    style={{ width: "100%" }}
+                                />
+
+                                <p>Data final</p>
+
+                                <input
+                                    type="date"
+                                    value={dataFinal}
+                                    onChange={(e) => setDataFinal(e.target.value)}
+                                    style={{ width: "100%" }}
+                                />
+
+                                {/* ====================== */}
+                                {/* BOTÕES */}
+                                {/* ====================== */}
 
                                 <div
                                     style={{
@@ -1551,18 +1379,22 @@ function estoque() {
 
                                     <button
                                         onClick={() => {
-                                            setFiltroAtivo(true);
-                                            setFiltroNaoAtivo(true);
-                                            setEstoqueMin("");
-                                            setEstoqueMax("");
-                                            setPrecoMin("");
-                                            setPrecoMax("");
+                                            setFiltroNome("");
+                                            setFiltroCnpj("");
+                                            setFiltroEmail("");
+                                            setFiltroTelefone("");
+                                            setDataInicial("");
+                                            setDataFinal("");
                                         }}
                                     >
                                         Limpar
                                     </button>
 
-
+                                    <button
+                                        onClick={() => setShowFiltro(false)}
+                                    >
+                                        Aplicar
+                                    </button>
 
                                 </div>
 
