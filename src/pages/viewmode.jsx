@@ -92,7 +92,7 @@ function App() {
             case "Fluxo de Caixa":
                 return <FluxoCaixa />
 
-            case "Fornecedore":
+            case "Fornecedores":
                 return<FornecedoresPage />
 
             // case "Registro de Custos":
