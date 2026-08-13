@@ -344,7 +344,7 @@ function estoque() {
     }));
 
     //ABAIXO SÃO OS FILTROS DE BUSCA DA BARRA DE PESQUISA E DO MODAL
-    const fornecedoresFiltrados = fornecedores.filter((fornecedor) => {
+    const fornecedoresFiltrados = fornecedor.filter((fornecedor) => {
 
         // ======================
         // PESQUISA
