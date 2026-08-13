@@ -202,7 +202,7 @@ function estoque() {
                 }
             )
             const fornecedores = resposta.data
-            console.log(fornecedores)
+            setFornecedores(fornecedores)
             setFornecedorA(fornecedores)
         } catch (err) {
             alert(err)
@@ -344,7 +344,7 @@ function estoque() {
     }));
 
     //ABAIXO SÃO OS FILTROS DE BUSCA DA BARRA DE PESQUISA E DO MODAL
-    const fornecedoresFiltrados = fornecedor.filter((fornecedor) => {
+    const fornecedoresFiltrados = fornecedores.filter((fornecedor) => {
 
         // ======================
         // PESQUISA
