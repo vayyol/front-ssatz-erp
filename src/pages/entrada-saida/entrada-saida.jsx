@@ -110,7 +110,6 @@ function registros() {
     //hvjgszhbskbj
     const [abrirProd, setAbrirProd] = useState(null);
 
-    const [produtoSelecionado, setProdutoSelecionado] = useState(null);
     const [vendaSelecionada, setVendaSelecionada] = useState(null);
     const [dropSelecionado, setDropSelecionado] = useState(null);
 
