@@ -44,6 +44,9 @@ function registros() {
     const [nomeFucio, setFuncionario] = useState("")
     const [produtoAberto, setProdutoAberto] = useState("")
 
+    const [itensVenda, setItemVenda] = useState([])
+    const [itensDrop, setItemDrop] = useState([])
+
     const navigate = useNavigate()
     var token = localStorage.getItem("token")
 
@@ -104,6 +107,14 @@ function registros() {
     });
 
     const [viewModeGrafico, setViewModeGrafico] = useState("DIAS");
+    //hvjgszhbskbj
+    const [abrirProd, setAbrirProd] = useState(null);
+
+    const [produtoSelecionado, setProdutoSelecionado] = useState(null);
+    const [vendaSelecionada, setVendaSelecionada] = useState(null);
+    const [dropSelecionado, setDropSelecionado] = useState(null);
+
+    const [tipoModal, setTipoModal] = useState(null);
 
     //estilos criados para a tabela de registros, para não precisar ficar repetindo o mesmo estilo em cada td e th
     const thStyle = {
@@ -328,6 +339,131 @@ function registros() {
             }
         }
     }
+
+    //Fução que da busca uma Venda por id
+    async function BuscarVenda(id_Venda) {
+        try {
+            const resposta = await axios.get(
+                `${API_URL}/sales/buscar-venda/${id_Venda}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            )
+            const VendaAtual = resposta.data
+            // cria uma cosnt da Venda atual e manda essa vend para 
+            setVendaSelecionada(VendaAtual);
+            await LoadProdInVenda(VendaAtual.id);
+        } catch (err) {
+            alert(err)
+            if (err.response?.status === 401) {
+                navigate("/login")
+            }
+        }
+    }
+
+    async function LoadProdInVenda(id_Venda) {
+        try {
+            const resposta = await axios.get(
+                `${API_URL}/sales/buscar-itens/${id_Venda}`,
+
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            )
+
+            const itens = resposta.data
+            setItemVenda(itens);
+
+
+        } catch (err) {
+            if (err.response?.status !== 404) {
+                alert(err)
+            }
+
+            if (err.response?.status === 401) {
+                navigate("/login")
+            } else if (err.response?.status === 404) {
+                const itens = [
+                    {
+                        "id": 0,
+                        "quantidade": 0,
+                        "subtotal": 0,
+                        "produto_id": 0,
+                        "Venda_id": 0,
+                        "preco_unitario": 0
+                    }
+                ]
+                setItemVenda(itens);
+            }
+        }
+    }
+
+    //Fução que da busca uma Drop por id
+    async function BuscarDrop(id_Drop) {
+        try {
+            const resposta = await axios.get(
+                `${API_URL}/order/buscar-drop/${id_Drop}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            )
+            const DropAtual = resposta.data
+            // cria uma cosnt da Drop atual e manda essa vend para verificação
+            setDropSelecionado(DropAtual);
+            LoadProdInDrop(DropAtual.id);
+        } catch (err) {
+            alert(err)
+            if (err.response?.status === 401) {
+                navigate("/login")
+            }
+        }
+    }
+
+    async function LoadProdInDrop(id_Drop) {
+        try {
+            const resposta = await axios.get(
+                `${API_URL}/order/buscar-itens/${id_Drop}`,
+
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            )
+
+            const itens = resposta.data
+            setItemDrop(itens);
+
+
+        } catch (err) {
+            if (err.response?.status !== 404) {
+                alert(err)
+            }
+
+            if (err.response?.status === 401) {
+                navigate("/login")
+            } else if (err.response?.status === 404) {
+                const itens = [
+                    {
+                        "id": 0,
+                        "quantidade": 0,
+                        "subtotal": 0,
+                        "produto_id": 0,
+                        "Drop_id": 0,
+                        "preco_unitario": 0
+                    }
+                ]
+                setItemDrop(itens);
+            }
+        }
+    }
+
 
 
 
@@ -862,15 +998,46 @@ function registros() {
                                         <tr
                                             key={registro.id}
 
-                                            onClick={() => {
-                                                setAbrirProd(registro);
+                                            onClick={async () => {
+
+                                                if (registro.tipo === "CRIAÇÃO") {
+
+                                                    const produto = produtos.find(
+                                                        (p) => Number(p.id) === Number(registro.aditional_id)
+                                                    );
+
+                                                    if (produto) {
+                                                        setProdutoSelecionado(produto);
+                                                        setTipoModal("CRIACAO");
+                                                        setAbrirProd(registro);
+                                                    }
+
+                                                } else if (
+                                                    registro.tipo === "VENDA" ||
+                                                    registro.tipo === "VENDA FINALIZADA"
+                                                ) {
+
+                                                    await BuscarVenda(registro.aditional_id);
+
+                                                    setTipoModal("VENDA");
+                                                    setAbrirProd(registro);
+
+                                                } else if (registro.tipo === "REESTOQUE") {
+
+                                                    await BuscarDrop(registro.aditional_id);
+
+                                                    setTipoModal("REESTOQUE");
+                                                    setAbrirProd(registro);
+
+                                                }
+
                                             }}
 
                                             className="
-                                    cursor-pointer
-                                    transition-colors
-                                    hover:bg-gray-100
-                                "
+                                                cursor-pointer
+                                                transition-colors
+                                                hover:bg-gray-100
+                                            "
 
                                             style={{
                                                 background:
@@ -924,6 +1091,284 @@ function registros() {
 
                                             <td className="px-4 py-3">
                                                 {registro.tipo ?? "-"}
+                                                {abrirProd && (
+
+                                                    <div
+                                                        className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+                                                        onClick={() => {
+                                                            setAbrirProd(null);
+                                                            setTipoModal(null);
+                                                        }}
+                                                    >
+
+                                                        <div
+                                                            className="bg-white rounded-xl shadow-xl w-full max-w-3xl p-6"
+                                                            onClick={(e) => e.stopPropagation()}
+                                                        >
+
+                                                            {/* =========================
+                CRIAÇÃO
+            ========================= */}
+
+                                                            {tipoModal === "CRIACAO" && produtoSelecionado && (
+
+                                                                <div>
+
+                                                                    <h2 className="text-xl font-bold text-gray-800 mb-5">
+                                                                        Produto criado
+                                                                    </h2>
+
+                                                                    <div className="grid grid-cols-2 gap-4">
+
+                                                                        <div>
+                                                                            <p className="text-sm text-gray-500">
+                                                                                ID
+                                                                            </p>
+
+                                                                            <p className="font-medium">
+                                                                                #{produtoSelecionado.id}
+                                                                            </p>
+                                                                        </div>
+
+                                                                        <div>
+                                                                            <p className="text-sm text-gray-500">
+                                                                                Produto
+                                                                            </p>
+
+                                                                            <p className="font-medium">
+                                                                                {produtoSelecionado.nome}
+                                                                            </p>
+                                                                        </div>
+
+                                                                        <div>
+                                                                            <p className="text-sm text-gray-500">
+                                                                                SKU
+                                                                            </p>
+
+                                                                            <p className="font-medium">
+                                                                                {produtoSelecionado.sku}
+                                                                            </p>
+                                                                        </div>
+
+                                                                        <div>
+                                                                            <p className="text-sm text-gray-500">
+                                                                                Estoque
+                                                                            </p>
+
+                                                                            <p className="font-medium">
+                                                                                {produtoSelecionado.estoque}
+                                                                            </p>
+                                                                        </div>
+
+                                                                        <div>
+                                                                            <p className="text-sm text-gray-500">
+                                                                                Preço de custo
+                                                                            </p>
+
+                                                                            <p className="font-medium">
+                                                                                {Number(
+                                                                                    produtoSelecionado.precoCusto ?? 0
+                                                                                ).toLocaleString("pt-BR", {
+                                                                                    style: "currency",
+                                                                                    currency: "BRL"
+                                                                                })}
+                                                                            </p>
+                                                                        </div>
+
+                                                                        <div>
+                                                                            <p className="text-sm text-gray-500">
+                                                                                Preço de venda
+                                                                            </p>
+
+                                                                            <p className="font-medium">
+                                                                                {Number(
+                                                                                    produtoSelecionado.preco ?? 0
+                                                                                ).toLocaleString("pt-BR", {
+                                                                                    style: "currency",
+                                                                                    currency: "BRL"
+                                                                                })}
+                                                                            </p>
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                </div>
+
+                                                            )}
+
+
+                                                            {/* =========================
+                VENDA
+            ========================= */}
+
+                                                            {tipoModal === "VENDA" && (
+
+                                                                <div>
+
+                                                                    <h2 className="text-xl font-bold text-gray-800 mb-5">
+                                                                        Venda
+                                                                    </h2>
+
+                                                                    {vendaSelecionada && (
+
+                                                                        <div className="mb-6">
+
+                                                                            <p>
+                                                                                <strong>ID da venda:</strong>{" "}
+                                                                                #{vendaSelecionada.id}
+                                                                            </p>
+
+                                                                        </div>
+
+                                                                    )}
+
+                                                                    <h3 className="font-semibold text-gray-700 mb-3">
+                                                                        Itens da venda
+                                                                    </h3>
+
+                                                                    <div className="space-y-2">
+
+                                                                        {itensVenda.map((item) => (
+
+                                                                            <div
+                                                                                key={item.id}
+                                                                                className="border rounded-lg p-3"
+                                                                            >
+
+                                                                                <div className="flex justify-between">
+
+                                                                                    <span>
+                                                                                        Produto #{item.produto_id}
+                                                                                    </span>
+
+                                                                                    <span>
+                                                                                        Quantidade: {item.quantidade}
+                                                                                    </span>
+
+                                                                                </div>
+
+                                                                                <div className="text-sm text-gray-500 mt-1">
+
+                                                                                    Preço unitário:{" "}
+
+                                                                                    {Number(
+                                                                                        item.preco_unitario ?? 0
+                                                                                    ).toLocaleString("pt-BR", {
+                                                                                        style: "currency",
+                                                                                        currency: "BRL"
+                                                                                    })}
+
+                                                                                </div>
+
+                                                                            </div>
+
+                                                                        ))}
+
+                                                                    </div>
+
+                                                                </div>
+
+                                                            )}
+
+
+                                                            {/* =========================
+                REESTOQUE
+            ========================= */}
+
+                                                            {tipoModal === "REESTOQUE" && (
+
+                                                                <div>
+
+                                                                    <h2 className="text-xl font-bold text-gray-800 mb-5">
+                                                                        Reestoque
+                                                                    </h2>
+
+                                                                    {dropSelecionado && (
+
+                                                                        <div className="mb-6">
+
+                                                                            <p>
+                                                                                <strong>ID do reestoque:</strong>{" "}
+                                                                                #{dropSelecionado.id}
+                                                                            </p>
+
+                                                                        </div>
+
+                                                                    )}
+
+                                                                    <h3 className="font-semibold text-gray-700 mb-3">
+                                                                        Itens do reestoque
+                                                                    </h3>
+
+                                                                    <div className="space-y-2">
+
+                                                                        {itensDrop.map((item) => (
+
+                                                                            <div
+                                                                                key={item.id}
+                                                                                className="border rounded-lg p-3"
+                                                                            >
+
+                                                                                <div className="flex justify-between">
+
+                                                                                    <span>
+                                                                                        Produto #{item.produto_id}
+                                                                                    </span>
+
+                                                                                    <span>
+                                                                                        Quantidade: {item.quantidade}
+                                                                                    </span>
+
+                                                                                </div>
+
+                                                                                <div className="text-sm text-gray-500 mt-1">
+
+                                                                                    Preço unitário:{" "}
+
+                                                                                    {Number(
+                                                                                        item.preco_unitario ?? 0
+                                                                                    ).toLocaleString("pt-BR", {
+                                                                                        style: "currency",
+                                                                                        currency: "BRL"
+                                                                                    })}
+
+                                                                                </div>
+
+                                                                            </div>
+
+                                                                        ))}
+
+                                                                    </div>
+
+                                                                </div>
+
+                                                            )}
+
+
+                                                            {/* =========================
+                BOTÃO FECHAR
+            ========================= */}
+
+                                                            <div className="flex justify-end mt-6">
+
+                                                                <button
+                                                                    onClick={() => {
+                                                                        setAbrirProd(null);
+                                                                        setTipoModal(null);
+                                                                    }}
+                                                                    className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300"
+                                                                >
+                                                                    Fechar
+                                                                </button>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+
+                                                )}
+
                                             </td>
 
 

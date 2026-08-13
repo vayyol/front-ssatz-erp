@@ -260,7 +260,7 @@ function estoque() {
             alert("Usuario cadastrado com sucesso!");
 
             // Opcional: recarregar a lista de produtos
-            LoadProdutos();
+            LoadUsers();
 
         } catch (err) {
 
@@ -391,8 +391,6 @@ function estoque() {
 
 
     useEffect(() => {
-        LoadProdutos()
-        LoadFornecedores()
         LoadUsers()
     }, [])
 
@@ -1101,8 +1099,6 @@ function estoque() {
                         <button
                             onClick={() => {
                                 setActiveProdutos("list");
-                                LoadProdutos();
-                                LoadFornecedores();
                                 LoadUsers();
                             }}
                         >
@@ -1160,8 +1156,6 @@ function estoque() {
 
                                 );
 
-                                LoadProdutos();
-                                LoadFornecedores();
                                 LoadUser();
                                 setActiveProdutos("list");
 
@@ -1228,8 +1222,6 @@ function estoque() {
                 <button
                     onClick={() => {
                         setActiveProdutos("new");
-                        LoadProdutos();
-                        LoadFornecedores();
                         LoadUser();
                         LoadUsuario();
                     }}
