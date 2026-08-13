@@ -1059,7 +1059,7 @@ function estoque() {
 
                                                             setLoadingConfirm(true);
 
-                                                            await CriarFornecedor();
+                                                            await CriarUser();
 
                                                             setLoadingConfirm(false);
 
