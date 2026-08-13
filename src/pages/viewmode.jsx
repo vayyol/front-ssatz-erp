@@ -17,6 +17,7 @@ import EntradaSaida from "./entrada-saida/entrada-saida"
 import RegistrosEstoque from "./movimentacoes/movimentacoes";
 import FluxoCaixa from "./fluxo-caixa/fluxo-caixa"
 import FornecedoresPage from "./fonecedores/fornecedores"
+import UsersPage from "./users/gestaousers"
 
 import {
     LayoutDashboard,
@@ -50,9 +51,9 @@ const menuItems = [
     { icon: Building2, label: "Fluxo de Caixa" },
     { icon: ShoppingCart, label: "Vendas" },
     { icon: Boxes, label: "Fornecedores" },
+    { icon: Users, label: "Gestão de Funcionários" },
     { icon: Building2, label: "Registros do Estoque" },
     // { icon: Calendar, label: "Agenda" },
-    // { icon: Users, label: "Pessoas" },
     // { icon: DollarSign, label: "Financeiro" },
     // { icon: DollarSign, label: "Registro de Custos" },
 ];
@@ -104,12 +105,8 @@ function App() {
             case "Registros do Estoque":
                 return <RegistrosEstoque />
 
-            case "Pessoas":
-                return (
-                    <h1 className="text-3xl font-bold">
-                        Essa é a visualização de pessoas
-                    </h1>
-                );
+            case "Gestão de Funcionários":
+                return <UsersPage />
 
             default:
                 return <h1 className="text-3xl font-bold">Página não encontrada</h1>;
