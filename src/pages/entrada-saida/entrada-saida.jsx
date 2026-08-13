@@ -1013,7 +1013,7 @@ function registros() {
 
                                                 } else if (
                                                     registro.tipo === "VENDA" ||
-                                                    registro.tipo === "VENDA FINALIZADA"
+                                                    registro.tipo === "VENDA FINALIZADO"
                                                 ) {
 
                                                     await BuscarVenda(registro.aditional_id);
