@@ -392,6 +392,7 @@ function estoque() {
     useEffect(() => {
         LoadProdutos()
         LoadFornecedores()
+        LoadUsers()
     }, [])
 
 
@@ -1084,6 +1085,7 @@ function estoque() {
                                 setActiveProdutos("list");
                                 LoadProdutos();
                                 LoadFornecedores();
+                                LoadUsers();
                             }}
                         >
                             Voltar
@@ -1142,6 +1144,7 @@ function estoque() {
 
                                 LoadProdutos();
                                 LoadFornecedores();
+                                LoadUser();
                                 setActiveProdutos("list");
 
                             }}
@@ -1209,6 +1212,7 @@ function estoque() {
                         setActiveProdutos("new");
                         LoadProdutos();
                         LoadFornecedores();
+                        LoadUser();
                         LoadUsuario();
                     }}
                     className="px-4 py-2 rounded-md font-semibold text-white transition-all"
