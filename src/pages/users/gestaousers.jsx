@@ -714,12 +714,14 @@ function estoque() {
                                                         <td className="px-4 py-3">
 
                                                             <span
-                                                                className={`px-2.5 py-1 rounded-full text-xs font-medium ${usuario.status === "Ativo"
+                                                                className={`px-2.5 py-1 rounded-full text-xs font-medium ${usuario.status === "true"
                                                                     ? "bg-green-100 text-green-700"
                                                                     : "bg-red-100 text-red-700"
                                                                     }`}
                                                             >
-                                                                {usuario.status}
+                                                                {usuario.status === "true"
+                                                                    ? "Ativo"
+                                                                    : "Não Ativo"}
                                                             </span>
 
                                                         </td>
@@ -1268,28 +1270,7 @@ function estoque() {
                     />
                 </div>
 
-                {/* Botão filtros */}
-                <button
-                    onClick={() => setShowFiltro(true)}
-                    style={{
-                        marginLeft: "10px",
-                        padding: "10px 15px",
-                        borderRadius: "8px",
-                        border: "1px solid #cfcfcf",
-                        background: "#f8f8f8",
-                        color: "#333",
-                        cursor: "pointer",
-                        transition: ".2s",
-                    }}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.background = "#ececec";
-                    }}
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.background = "#f8f8f8";
-                    }}
-                >
-                    ⚙ Filtros
-                </button>
+                
 
                 {/* Ícone Lista */}
                 <div
@@ -1308,171 +1289,6 @@ function estoque() {
             <div className="p-6">
                 {renderContent()}
 
-
-                {/* CRIA UM MODAL, JANELA FLUTANTE QUE TEM FILTROS PARA O ESTOQUE */}
-                {
-                    showFiltro && (
-
-                        <div
-                            style={{
-                                position: "fixed",
-                                inset: 0,
-                                background: "rgba(0,0,0,.45)",
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                zIndex: 1000
-                            }}
-                        >
-
-                            <div
-                                style={{
-                                    width: "420px",
-                                    background: "#1f2937",
-                                    color: "white",
-                                    borderRadius: "10px",
-                                    padding: "20px",
-                                    position: "relative"
-                                }}
-                            >
-
-                                <button
-                                    onClick={() => setShowFiltro(false)}
-                                    style={{
-                                        position: "absolute",
-                                        right: 15,
-                                        top: 10,
-                                        background: "transparent",
-                                        border: "none",
-                                        color: "white",
-                                        fontSize: "22px",
-                                        cursor: "pointer"
-                                    }}
-                                >
-                                    ×
-                                </button>
-
-                                <h2>Filtros</h2>
-
-                                <hr />
-
-                                {/* ====================== */}
-                                {/* NOME */}
-                                {/* ====================== */}
-
-                                <p>Nome</p>
-
-                                <input
-                                    type="text"
-                                    value={filtroNome}
-                                    onChange={(e) => setFiltroNome(e.target.value)}
-                                    placeholder="Nome do fornecedor"
-                                    style={{ width: "100%" }}
-                                />
-
-                                {/* ====================== */}
-                                {/* CNPJ */}
-                                {/* ====================== */}
-
-                                <p>CNPJ</p>
-
-                                <input
-                                    type="text"
-                                    value={filtroCnpj}
-                                    onChange={(e) => setFiltroCnpj(e.target.value)}
-                                    placeholder="CNPJ"
-                                    style={{ width: "100%" }}
-                                />
-
-                                {/* ====================== */}
-                                {/* EMAIL */}
-                                {/* ====================== */}
-
-                                <p>Email</p>
-
-                                <input
-                                    type="text"
-                                    value={filtroEmail}
-                                    onChange={(e) => setFiltroEmail(e.target.value)}
-                                    placeholder="Email"
-                                    style={{ width: "100%" }}
-                                />
-
-                                {/* ====================== */}
-                                {/* TELEFONE */}
-                                {/* ====================== */}
-
-                                <p>Telefone</p>
-
-                                <input
-                                    type="text"
-                                    value={filtroTelefone}
-                                    onChange={(e) => setFiltroTelefone(e.target.value)}
-                                    placeholder="Telefone"
-                                    style={{ width: "100%" }}
-                                />
-
-                                {/* ====================== */}
-                                {/* PERÍODO */}
-                                {/* ====================== */}
-
-                                <p>Data inicial</p>
-
-                                <input
-                                    type="date"
-                                    value={dataInicial}
-                                    onChange={(e) => setDataInicial(e.target.value)}
-                                    style={{ width: "100%" }}
-                                />
-
-                                <p>Data final</p>
-
-                                <input
-                                    type="date"
-                                    value={dataFinal}
-                                    onChange={(e) => setDataFinal(e.target.value)}
-                                    style={{ width: "100%" }}
-                                />
-
-                                {/* ====================== */}
-                                {/* BOTÕES */}
-                                {/* ====================== */}
-
-                                <div
-                                    style={{
-                                        marginTop: "20px",
-                                        display: "flex",
-                                        justifyContent: "space-between"
-                                    }}
-                                >
-
-                                    <button
-                                        onClick={() => {
-                                            setFiltroNome("");
-                                            setFiltroCnpj("");
-                                            setFiltroEmail("");
-                                            setFiltroTelefone("");
-                                            setDataInicial("");
-                                            setDataFinal("");
-                                        }}
-                                    >
-                                        Limpar
-                                    </button>
-
-                                    <button
-                                        onClick={() => setShowFiltro(false)}
-                                    >
-                                        Aplicar
-                                    </button>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    )
-                }
 
 
             </div>
