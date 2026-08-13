@@ -167,6 +167,7 @@ function registros() {
                 id: m.id,
                 descricao: m.descricao,
                 quantidade: m.quantidade,
+                aditional_id:m.aditional_id,
 
                 // Data original (usar nos filtros)
                 vencimento: m.vencimento,
