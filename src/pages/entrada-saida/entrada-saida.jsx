@@ -108,7 +108,6 @@ function registros() {
 
     const [viewModeGrafico, setViewModeGrafico] = useState("DIAS");
     //hvjgszhbskbj
-    const [abrirProd, setAbrirProd] = useState(null);
 
     const [vendaSelecionada, setVendaSelecionada] = useState(null);
     const [dropSelecionado, setDropSelecionado] = useState(null);
@@ -1090,7 +1089,7 @@ function registros() {
 
                                             <td className="px-4 py-3">
                                                 {registro.tipo ?? "-"}
-                                                {abrirProd && (
+                                                {prodAberto && (
 
                                                     <div
                                                         className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
