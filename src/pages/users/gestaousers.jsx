@@ -248,6 +248,7 @@ function estoque() {
                     user: username,
                     senha: senha,
                     cargo: cargo,
+                    admin: isAdmin,
                 },
                 {
                     headers: {
@@ -903,7 +904,7 @@ function estoque() {
 
                                 <div>
                                     <label className="block mb-2 font-medium text-gray-700">
-                                        Telefone para Contato
+                                        Senha
                                     </label>
 
                                     <input
