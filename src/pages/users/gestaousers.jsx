@@ -904,13 +904,30 @@ function estoque() {
 
                                 <div>
                                     <label className="block mb-2 font-medium text-gray-700">
-                                        Senha
+                                        Cargo
                                     </label>
 
                                     <input
                                         type="text"
                                         value={cargo}
                                         onChange={(e) => setCargo(e.target.value)}
+                                        className="w-full rounded-xl border px-4 py-3 outline-none"
+                                        style={{
+                                            borderColor: "#d1d5db",
+                                            background: "#fafafa",
+                                        }}
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block mb-2 font-medium text-gray-700">
+                                        Senha
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        value={senha}
+                                        onChange={(e) => setSenha(e.target.value)}
                                         className="w-full rounded-xl border px-4 py-3 outline-none"
                                         style={{
                                             borderColor: "#d1d5db",
