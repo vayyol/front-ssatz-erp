@@ -18,6 +18,8 @@ import RegistrosEstoque from "./movimentacoes/movimentacoes";
 import FluxoCaixa from "./fluxo-caixa/fluxo-caixa"
 import FornecedoresPage from "./fonecedores/fornecedores"
 import UsersPage from "./users/gestaousers"
+import UserPage from "./users/user"
+
 
 import {
     LayoutDashboard,
@@ -53,6 +55,7 @@ const menuItems = [
     { icon: Boxes, label: "Fornecedores" },
     { icon: Users, label: "Gestão de Funcionários" },
     { icon: Building2, label: "Registros do Estoque" },
+    { icon: LayoutDashboard, label: "Usuário" },
     // { icon: Calendar, label: "Agenda" },
     // { icon: DollarSign, label: "Financeiro" },
     // { icon: DollarSign, label: "Registro de Custos" },
@@ -107,6 +110,9 @@ function App() {
 
             case "Gestão de Funcionários":
                 return <UsersPage />
+
+            case "Usuário":
+                return <UserPage />
 
             default:
                 return <h1 className="text-3xl font-bold">Página não encontrada</h1>;
